@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LN Node Profile Rank</title>
+    
+    <!-- Bitcoin Data Labs styles -->
+    <link rel="stylesheet" href="https://sorukumar.github.io/Bitcoin-Data-Labs/styles/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Local styles -->
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Bitcoin Data Labs Header -->
+    <div id="header"></div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <p>Comprehensive rankings and detailed profiles of Lightning Network nodes</p>
+        </div>
+        
+        <div class="visualization-grid">
+            <a href="prank.html" class="visualization-card">
+                <div class="card-title">Node Rankings</div>
+                <div class="card-description">
+                    View Lightning Network node rankings and statistics with advanced filtering and sorting capabilities.
+                    Explore comprehensive data about node performance and network metrics.
+                </div>
+                <div class="card-meta">
+                    <i class="fas fa-chart-bar"></i> Rankings & Statistics
+                </div>
+            </a>
+
+            <a href="#" class="visualization-card coming-soon">
+                <div class="card-title">Node Profiles</div>
+                <div class="card-description">
+                    Detailed profiles and analysis of Lightning Network nodes including historical data and metrics.
+                    Deep dive into individual node performance and characteristics.
+                </div>
+                <div class="card-meta">
+                    <i class="fas fa-user-circle"></i> Coming Soon
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Bitcoin Data Labs Footer -->
+    <div id="footer"></div>
+
+    <!-- Bitcoin Data Labs App Components -->
+    <script src="https://sorukumar.github.io/Bitcoin-Data-Labs/components/app-components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            BitcoinLabsAppComponents.init({
+                isApp: true,
+                appName: "ln-nodeprofile-rank",
+                appHomeUrl: "https://github.com/sorukumar/ln-nodeprofile-rank"
+            });
+        });
+    </script>
+</body>
+</html>

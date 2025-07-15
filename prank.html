@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Rankings - LN Node Profile Rank</title>
+    
+    <!-- Bitcoin Data Labs styles -->
+    <link rel="stylesheet" href="https://sorukumar.github.io/Bitcoin-Data-Labs/styles/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Local styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/table.css">
+</head>
+<body>
+    <!-- Bitcoin Data Labs Header -->
+    <div id="header"></div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Lightning Network Node Rankings</h1>
+            <p>Comprehensive rankings and statistics of Lightning Network nodes</p>
+        </div>
+        
+        <div class="table-controls">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search nodes..." class="search-input">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="pagination-info">
+                <span id="paginationInfo">Loading...</span>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Loading node ranking data...
+            </div>
+            <table id="dataTable" class="data-table" style="display: none;">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        
+        <div class="pagination-controls">
+            <button id="prevBtn" class="pagination-btn" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <span id="pageNumbers" class="page-numbers"></span>
+            <button id="nextBtn" class="pagination-btn" disabled>
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Bitcoin Data Labs Footer -->
+    <div id="footer"></div>
+    
+    <!-- Bitcoin Data Labs App Components -->
+    <script src="https://sorukumar.github.io/Bitcoin-Data-Labs/components/app-components.js"></script>
+    <!-- Hyparquet for parquet file parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/hyparquet@latest/dist/hyparquet.min.js"></script>
+    <!-- Table functionality -->
+    <script src="scripts/table.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            BitcoinLabsAppComponents.init({
+                isApp: true,
+                appName: "ln-nodeprofile-rank",
+                appHomeUrl: "https://github.com/sorukumar/ln-nodeprofile-rank"
+            });
+        });
+    </script>
+</body>
+</html>

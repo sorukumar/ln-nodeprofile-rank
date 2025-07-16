@@ -1,3 +1,5 @@
+import { parquetRead } from 'https://cdn.jsdelivr.net/npm/hyparquet@1.17.1/+esm';
+
 class DataTableManager {
     constructor() {
         this.data = [];
@@ -7,20 +9,21 @@ class DataTableManager {
         this.sortColumn = null;
         this.sortDirection = 'asc';
         
+        if (window.location.protocol === 'file:') {
+            this.showError('Please use Live Server extension or local web server.');
+            return;
+        }
+        
         this.initializeEventListeners();
         this.loadData();
     }
     
     initializeEventListeners() {
-        // Search functionality
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                this.filterData(e.target.value);
-            });
+            searchInput.addEventListener('input', (e) => this.filterData(e.target.value));
         }
         
-        // Pagination buttons
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         
@@ -47,32 +50,61 @@ class DataTableManager {
     async loadData() {
         try {
             const response = await fetch('data/node_rank.parquet');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             
             const arrayBuffer = await response.arrayBuffer();
             
-            // Parse parquet file using hyparquet
-            const { parquetRead } = hyparquet;
-            
             await parquetRead({
                 file: arrayBuffer,
-                onComplete: (data) => {
-                    this.data = data;
+                onComplete: (result) => {
+                    console.log('parquetRead result:', result);
+                    console.log('Total rows:', result.length);
+                    
+                    // Manually define column names based on your Parquet schema
+                    const columns = [
+                        'Pleb_Rank',
+                        'Betweenness_Rank', 
+                        'Eigenvector_Rank',
+                        'PageRank',
+                        'Weighted_Degree_Rank',
+                        'Channels_Rank',
+                        'Capacity_Rank',
+                        'alias',
+                        'Node_Type',
+                        'Total_Capacity',
+                        'Num_Channels',
+                        'Public_Key'
+                    ];
+                    
+                    if (result.columns && result.data) {
+                        // If result has columns and data properties (unlikely with hyparquet)
+                        this.data = result.data.map(row =>
+                            Object.fromEntries(result.columns.map((col, i) => [col, row[i]]))
+                        );
+                    } else if (Array.isArray(result) && result.length > 0) {
+                        // Map each data row to an object using manual column names
+                        this.data = result.map(row =>
+                            Object.fromEntries(columns.map((col, i) => [col, row[i]]))
+                        );
+                    } else {
+                        this.data = [];
+                    }
+                    
                     this.filteredData = [...this.data];
                     this.renderTable();
                     this.hideLoading();
                 },
-                onError: (error) => {
-                    console.error('Parquet parsing error:', error);
-                    this.showError('Error parsing parquet file: ' + error.message);
-                }
+                onError: (error) => this.showError('Error parsing parquet file: ' + error.message)
             });
             
         } catch (error) {
-            console.error('Error loading data:', error);
-            this.showError('Failed to load data. Please make sure the parquet file exists in the data folder.');
+            if (error.message.includes('Failed to fetch')) {
+                this.showError('Network Error: Please use Live Server extension.');
+            } else if (error.message.includes('404')) {
+                this.showError('File not found: Check if node_rank.parquet exists in data/ folder.');
+            } else {
+                this.showError('Error: ' + error.message);
+            }
         }
     }
     
@@ -104,11 +136,9 @@ class DataTableManager {
             let aVal = a[column];
             let bVal = b[column];
             
-            // Handle null/undefined values
             if (aVal === null || aVal === undefined) aVal = '';
             if (bVal === null || bVal === undefined) bVal = '';
             
-            // Handle numeric values
             if (!isNaN(aVal) && !isNaN(bVal) && aVal !== '' && bVal !== '') {
                 aVal = Number(aVal);
                 bVal = Number(bVal);
@@ -128,12 +158,10 @@ class DataTableManager {
     }
     
     updateSortIndicators(column) {
-        // Remove existing sort classes
         document.querySelectorAll('th').forEach(th => {
             th.classList.remove('sort-asc', 'sort-desc');
         });
         
-        // Add sort class to current column
         const th = document.querySelector(`th[data-column="${column}"]`);
         if (th) {
             th.classList.add(`sort-${this.sortDirection}`);
@@ -149,7 +177,6 @@ class DataTableManager {
         
         if (!table || !thead || !tbody) return;
         
-        // Render header (only once)
         if (thead.children.length === 0) {
             const headerRow = document.createElement('tr');
             const columns = Object.keys(this.data[0]);
@@ -166,7 +193,6 @@ class DataTableManager {
             thead.appendChild(headerRow);
         }
         
-        // Render body
         tbody.innerHTML = '';
         const startIndex = (this.currentPage - 1) * this.itemsPerPage;
         const endIndex = startIndex + this.itemsPerPage;
@@ -195,9 +221,7 @@ class DataTableManager {
     }
     
     formatCellValue(value) {
-        if (value === null || value === undefined) {
-            return '-';
-        }
+        if (value === null || value === undefined) return '-';
         
         if (typeof value === 'number') {
             if (Number.isInteger(value)) {
@@ -222,16 +246,13 @@ class DataTableManager {
         
         if (!prevBtn || !nextBtn || !pageNumbers || !paginationInfo) return;
         
-        // Update buttons
         prevBtn.disabled = this.currentPage <= 1;
         nextBtn.disabled = this.currentPage >= totalPages;
         
-        // Update pagination info
         const startItem = this.filteredData.length === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
         const endItem = Math.min(this.currentPage * this.itemsPerPage, this.filteredData.length);
         paginationInfo.textContent = `Showing ${startItem}-${endItem} of ${this.filteredData.length} entries`;
         
-        // Update page numbers
         pageNumbers.innerHTML = '';
         
         if (totalPages <= 1) return;
@@ -263,9 +284,7 @@ class DataTableManager {
     
     hideLoading() {
         const loading = document.getElementById('loading');
-        if (loading) {
-            loading.style.display = 'none';
-        }
+        if (loading) loading.style.display = 'none';
     }
     
     showError(message) {
@@ -277,9 +296,7 @@ class DataTableManager {
     }
 }
 
-// Initialize the data table when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    // Only initialize if we're on the prank page
     if (document.getElementById('dataTable')) {
         new DataTableManager();
     }

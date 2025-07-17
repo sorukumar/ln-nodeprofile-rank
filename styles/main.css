@@ -1,6 +1,94 @@
 /* Additional styles for ln-nodeprofile-rank */
 /* Builds on top of Bitcoin Data Labs base styles */
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#footer {
+    margin-top: auto;
+}
+
+.page-header {
+    text-align: center;
+    margin: 3rem auto;
+    width: var(--container-width, 90%);
+    max-width: var(--max-content-width, 1200px);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.page-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.visualization-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    width: var(--container-width, 90%);
+    max-width: var(--max-content-width, 1200px);
+    margin: 2rem auto;
+}
+
+.visualization-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.visualization-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.card-description {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
 /* Coming soon card styling - extends existing .visualization-card */
 .visualization-card.coming-soon {
     opacity: 0.7;
@@ -10,7 +98,8 @@
 
 .visualization-card.coming-soon:hover {
     transform: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: none;
+    border-color: var(--bg-secondary);
 }
 
 .visualization-card.coming-soon::after {
@@ -20,7 +109,15 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: inherit;
     pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .visualization-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
 }

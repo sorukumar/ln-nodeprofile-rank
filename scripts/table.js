@@ -1,5 +1,47 @@
 import { parquetRead } from 'https://cdn.jsdelivr.net/npm/hyparquet@1.17.1/+esm';
 
+// Function to copy pub key to clipboard
+function copyPubKey(pubKey, element) {
+    navigator.clipboard.writeText(pubKey).then(() => {
+        // Store original content
+        const originalText = element.textContent;
+
+        // Update to show success state
+        element.textContent = 'Copied!';
+        element.style.background = 'var(--primary)';
+        element.style.color = 'white';
+
+        // Revert back after 1.5 seconds
+        setTimeout(() => {
+            element.textContent = originalText;
+            element.style.background = '';
+            element.style.color = '';
+        }, 1500);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = pubKey;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Show success state even with fallback
+        element.textContent = 'Copied!';
+        element.style.background = 'var(--primary)';
+        element.style.color = 'white';
+        
+        setTimeout(() => {
+            element.textContent = pubKey.substring(0, 8) + '...';
+            element.style.background = '';
+            element.style.color = '';
+        }, 1500);
+    });
+}
+
+window.copyPubKey = copyPubKey;
+
 class DataTableManager {
     constructor() {
         this.data = [];
@@ -17,7 +59,6 @@ class DataTableManager {
         this.initializeEventListeners();
         this.loadData();
     }
-    
     initializeEventListeners() {
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
@@ -167,7 +208,6 @@ class DataTableManager {
             th.classList.add(`sort-${this.sortDirection}`);
         }
     }
-    
     renderTable() {
         if (this.data.length === 0) return;
         
@@ -200,9 +240,22 @@ class DataTableManager {
         
         pageData.forEach(row => {
             const tr = document.createElement('tr');
-            Object.values(row).forEach(value => {
+            
+            // Fixed: Use Object.entries to get both key and value
+            Object.entries(row).forEach(([key, value]) => {
                 const td = document.createElement('td');
-                td.textContent = this.formatCellValue(value);
+
+                // Special handling for pubkey column
+                if (key === 'Public_Key' || key.toLowerCase().includes('pubkey') || key.toLowerCase().includes('public_key')) {
+                    td.classList.add('pubkey-cell');
+                    td.innerHTML = `
+                        <span class="pubkey-truncated" onclick="copyPubKey('${value}', this)" title="Click to copy: ${value}">
+                            ${value.substring(0, 8)}...
+                        </span>
+                    `;
+                } else {
+                    td.textContent = this.formatCellValue(value);
+                }
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);

@@ -166,33 +166,57 @@ class DataTableManager {
     }
     
     sortData(column) {
+        // Skip sorting for non-sortable columns
+        const nonSortableColumns = ['alias', 'Public_Key'];
+        if (nonSortableColumns.includes(column)) return;
+
         if (this.sortColumn === column) {
             this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
             this.sortColumn = column;
             this.sortDirection = 'asc';
         }
-        
+
+        const multiplier = this.sortDirection === 'asc' ? 1 : -1;
+
+        // Define numeric columns
+        const numericColumns = [
+            'Pleb_Rank',
+            'Betweenness_Rank',
+            'Eigenvector_Rank',
+            'PageRank',
+            'Weighted_Degree_Rank',
+            'Channels_Rank',
+            'Capacity_Rank',
+            'Num_Channels'
+        ];
+
         this.filteredData.sort((a, b) => {
             let aVal = a[column];
             let bVal = b[column];
-            
-            if (aVal === null || aVal === undefined) aVal = '';
-            if (bVal === null || bVal === undefined) bVal = '';
-            
-            if (!isNaN(aVal) && !isNaN(bVal) && aVal !== '' && bVal !== '') {
-                aVal = Number(aVal);
-                bVal = Number(bVal);
-            } else {
-                aVal = String(aVal).toLowerCase();
-                bVal = String(bVal).toLowerCase();
+
+            // Handle null/undefined values
+            if (aVal === null || aVal === undefined) return 1 * multiplier;
+            if (bVal === null || bVal === undefined) return -1 * multiplier;
+
+            // Use Capacity_Rank for Total_Capacity sorting
+            if (column === 'Total_Capacity') {
+                return (Number(a['Capacity_Rank']) - Number(b['Capacity_Rank'])) * multiplier;
             }
-            
-            if (aVal < bVal) return this.sortDirection === 'asc' ? -1 : 1;
-            if (aVal > bVal) return this.sortDirection === 'asc' ? 1 : -1;
+
+            // Handle numeric columns
+            if (numericColumns.includes(column)) {
+                return (Number(aVal) - Number(bVal)) * multiplier;
+            }
+
+            // Handle Node_Type (string comparison)
+            if (column === 'Node_Type') {
+                return String(aVal).localeCompare(String(bVal)) * multiplier;
+            }
+
             return 0;
         });
-        
+
         this.currentPage = 1;
         this.renderTable();
         this.updateSortIndicators(column);
@@ -225,8 +249,14 @@ class DataTableManager {
                 const th = document.createElement('th');
                 th.textContent = this.formatColumnName(column);
                 th.dataset.column = column;
-                th.classList.add('sortable');
-                th.addEventListener('click', () => this.sortData(column));
+                
+                // Only add sorting for sortable columns
+                const nonSortableColumns = ['alias', 'Public_Key'];
+                if (!nonSortableColumns.includes(column)) {
+                    th.classList.add('sortable');
+                    th.addEventListener('click', () => this.sortData(column));
+                }
+                
                 headerRow.appendChild(th);
             });
             

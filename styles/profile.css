@@ -201,28 +201,57 @@
 
 /* Tab Content */
 .tab-content {
-    min-height: 400px;
-    height: 100%;
-    min-height: 0;
     position: relative;
 }
 
 .tab-pane {
-    display: none;
+    display: none !important;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     width: 100%;
-    min-height: 400px;
+    /* Ensure all content is selectable and clickable */
+    user-select: text !important;
+    pointer-events: auto !important;
+    min-height: auto;
 }
 
 .tab-pane.active {
-    display: block;
+    display: block !important;
     opacity: 1;
-    position: relative;
+}
+
+/* Remove unnecessary min-height that was causing empty space */
+.tab-pane {
+    min-height: auto;
+}
+
+/* Specific fix for channels-table tab to remove empty space */
+#channels-table {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#channels-table .section-header {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+/* Ensure all text content in tabs is selectable */
+.tab-pane * {
+    user-select: text !important;
+    pointer-events: auto !important;
+}
+
+/* Only prevent text selection on interactive elements */
+.tab-pane button, .tab-pane .btn, .tab-pane .tab-btn {
+    user-select: none !important;
+}
+
+/* Force all links to be clickable */
+.tab-pane a, .info-item a, .info-value a {
+    pointer-events: auto !important;
+    user-select: text !important;
+    cursor: pointer !important;
 }
 
 /* Overview Tab */
@@ -413,6 +442,11 @@
     border-radius: 8px;
     background: var(--bg-primary);
     overflow: hidden;
+    display: none;
+}
+
+#channels.active #channelsTreemap {
+    display: block !important;
 }
 
 /* Ensure channels tab takes full available space */
@@ -425,6 +459,11 @@
 
 #channels.active {
     display: flex !important;
+}
+
+/* Extra safety: hide treemap unless channels tab is active */
+#channels:not(.active) #channelsTreemap {
+    display: none !important;
 }
 
 /* Section Headers */

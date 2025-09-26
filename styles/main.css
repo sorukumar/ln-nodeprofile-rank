@@ -46,6 +46,47 @@ body {
     margin-top: auto;
 }
 
+/* Allow text selection and pointer events in all content areas */
+* {
+    user-select: text;
+    pointer-events: auto;
+}
+
+/* Only prevent text selection on interactive UI elements */
+button, .btn, .tab-btn, .pagination-btn, .view-btn, .filter-preset, .reset-btn, 
+.copy-btn, .search-button, .toggle-filters, .sortable, th.sortable, 
+.node-card:hover, .suggestion-item, .page-number {
+    user-select: none;
+}
+
+/* Ensure links are always clickable */
+a, a *, .info-item a, .info-value a, [href] {
+    pointer-events: auto !important;
+    user-select: text !important;
+    cursor: pointer;
+}
+
+/* Ensure text areas are selectable */
+.info-grid, .info-item, .info-value, .info-label, 
+.overview-section, .node-pubkey, .pubkey-display,
+.channels-table td, .channels-table th,
+p, span, div:not(.btn):not(.button):not([role="button"]) {
+    user-select: text !important;
+    pointer-events: auto !important;
+}
+
+/* Birth transaction link styling */
+.info-item a {
+    color: var(--primary);
+    text-decoration: underline;
+    word-break: break-all;
+}
+
+.info-item a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
 /* --- Modern Hero Section --- */
 .hero-search-section {
     width: 100%;

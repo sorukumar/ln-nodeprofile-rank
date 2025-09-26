@@ -3,6 +3,30 @@
    Centralized component library to eliminate CSS redundancy
    ========================================================================== */
 
+/* Global text selection rules - allow by default */
+* {
+    user-select: text !important;
+    pointer-events: auto !important;
+}
+
+/* Only prevent text selection on specific UI controls */
+button, .btn, .btn-primary, .btn-secondary, .btn-ghost, .btn-action,
+.nav-btn, .pagination-btn, .page-number, .tab-btn,
+input[type="button"], input[type="submit"], input[type="reset"],
+[role="button"], .sortable, th.sortable {
+    user-select: none !important;
+}
+
+/* Ensure all links and text content remain selectable and clickable */
+a, a *, [href], [href] *,
+.info-item, .info-value, .info-label,
+span, p, div:not(.btn):not([role="button"]),
+td, th:not(.sortable), 
+.overview-section, .ranking-card, .metric-card {
+    user-select: text !important;
+    pointer-events: auto !important;
+}
+
 /* ==========================================================================
    BUTTONS
    ========================================================================== */

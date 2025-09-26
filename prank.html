@@ -12,6 +12,7 @@
     <!-- Local styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/table.css">
+    <link rel="stylesheet" href="styles/components.css">
     
 </head>
 <body>
@@ -19,18 +20,42 @@
     <div id="header"></div>
     
     <div class="main-content">
-        <div class="page-header">
-            <h1>Lightning Network Node Rankings</h1>
-            <p class="page-description">Comprehensive rankings and statistics of Lightning Network nodes</p>
+        <!-- Breadcrumb Navigation -->
+        <div class="breadcrumb-container">
+            <div class="breadcrumb">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Node Rankings</span>
+            </div>
         </div>
         
+        <!-- Modern Page Header (consistent with Node Explorer) -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title-section">
+                    <h1><i class="fas fa-chart-bar"></i> Node Rankings</h1>
+                    <p>Comprehensive rankings and statistics of Lightning Network nodes</p>
+                </div>
+                <div class="page-actions">
+                    <div class="nav-btn-group">
+                        <a href="trending.html" class="nav-btn">
+                            <i class="fas fa-compass"></i>
+                            Node Explorer
+                        </a>
+                        <a href="index.html" class="nav-btn">
+                            <i class="fas fa-home"></i>
+                            Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Table Controls (moved closer to reduce space) -->
         <div class="table-controls">
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search nodes..." class="search-input">
+                <input type="text" id="searchInput" placeholder="Search by node alias or pubkey..." class="search-input">
                 <i class="fas fa-search search-icon"></i>
-            </div>
-            <div class="pagination-info">
-                <span id="paginationInfo">Loading...</span>
             </div>
         </div>
         
@@ -45,14 +70,19 @@
             </table>
         </div>
         
-        <div class="pagination-controls">
-            <button id="prevBtn" class="pagination-btn" disabled>
-                <i class="fas fa-chevron-left"></i> Previous
-            </button>
-            <span id="pageNumbers" class="page-numbers"></span>
-            <button id="nextBtn" class="pagination-btn" disabled>
-                Next <i class="fas fa-chevron-right"></i>
-            </button>
+        <div class="pagination-container">
+            <div class="pagination-info">
+                <span id="paginationInfo">Loading...</span>
+            </div>
+            <div class="pagination-controls">
+                <button id="prevBtn" class="pagination-btn" disabled>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span id="pageNumbers" class="page-numbers"></span>
+                <button id="nextBtn" class="pagination-btn" disabled>
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </div>
     

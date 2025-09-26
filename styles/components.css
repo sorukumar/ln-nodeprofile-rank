@@ -1,0 +1,785 @@
+/* ==========================================================================
+   REUSABLE UI COMPONENTS
+   Centralized component library to eliminate CSS redundancy
+   ========================================================================== */
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 4px 12px rgba(232, 145, 107, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(232, 145, 107, 0.4);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 145, 107, 0.3);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-ghost:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 145, 107, 0.3);
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 16px;
+}
+
+/* Modern action button for cards */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 1px solid rgba(232, 145, 107, 0.2);
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.btn-action:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232, 145, 107, 0.3);
+}
+
+/* Navigation button group */
+.nav-btn-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nav-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(232, 145, 107, 0.3);
+}
+
+.nav-btn i {
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   SEARCH INPUTS
+   ========================================================================== */
+
+.search-container {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+/* Base search input - used across all pages except homepage hero */
+.search-input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 2px solid var(--bg-secondary);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(232, 145, 107, 0.1);
+}
+
+/* Standardized search icon positioning - RIGHT SIDE */
+.search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+    font-size: 1rem;
+    z-index: 2;
+}
+
+/* Legacy support for input-icon class */
+.input-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+    font-size: 1rem;
+    z-index: 2;
+}
+
+/* CRITICAL: Ensure input has proper RIGHT padding when icon is present */
+.search-container .search-input {
+    padding-right: 2.5rem !important;
+}
+
+/* Table-specific search styling (for prank.html) */
+.table-controls .search-container {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.table-controls .search-input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 2px solid var(--bg-secondary);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+}
+
+/* Override any conflicting left-positioned icons from trending.css */
+.search-container .search-icon {
+    left: auto !important;
+    right: 1rem !important;
+}
+
+/* Remove any padding-left that might be set by trending.css */
+.search-container .search-input {
+    padding-left: 1rem !important;
+}
+
+/* ==========================================================================
+   PAGINATION
+   ========================================================================== */
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: var(--container-width, 90%);
+    max-width: var(--max-content-width, 1200px);
+    margin: 2rem auto;
+    padding: 1rem 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pagination-container.container {
+    /* Override for trending page */
+    width: var(--container-width, 90%);
+    max-width: var(--max-content-width, 1200px);
+}
+
+.pagination-info {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    min-height: 40px;
+    min-width: 40px;
+    justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: var(--surface);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    border-color: var(--bg-secondary);
+}
+
+.pagination-btn.active {
+    background: var(--primary);
+    color: var(--surface);
+    border-color: var(--primary);
+    font-weight: 600;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.page-number {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-primary);
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 40px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-number:hover {
+    background: var(--primary);
+    color: var(--surface);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.page-number.active {
+    background: var(--primary);
+    color: var(--surface);
+    border-color: var(--primary);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   LOADING STATES
+   ========================================================================== */
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    text-align: center;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loading-spinner i {
+    font-size: 2rem;
+    color: var(--primary);
+    animation: spin 1s linear infinite;
+}
+
+.loading-spinner p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-inline {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.loading-inline i {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    color: var(--primary);
+}
+
+/* ==========================================================================
+   CARDS
+   ========================================================================== */
+
+.card {
+    background: var(--bg-primary);
+    border: 1px solid var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.card-compact {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.card-header i {
+    color: var(--primary);
+}
+
+.card-body {
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   BADGES & LABELS
+   ========================================================================== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.badge-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.badge-round {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    padding: 0;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   FORM CONTROLS
+   ========================================================================== */
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--bg-secondary);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(232, 145, 107, 0.1);
+}
+
+.form-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* ==========================================================================
+   LAYOUT UTILITIES
+   ========================================================================== */
+
+.container {
+    width: var(--container-width, 90%);
+    max-width: var(--max-content-width, 1200px);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary);
+}
+
+.section-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   BREADCRUMB COMPONENTS
+   ========================= */
+
+.breadcrumb-container {
+    width: var(--container-width, 90%);
+    max-width: var(--max-content-width, 1200px);
+    margin: 0 auto 0.75rem auto;  /* Reduced from 1.5rem to 0.75rem */
+    padding: 0 1rem;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.5rem 0 0.75rem 0;  /* Reduced bottom from 1.2rem to 0.75rem */
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.breadcrumb a {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.breadcrumb a:hover {
+    color: var(--bitcoin-orange, #f7931a);
+    background: var(--bg-secondary);
+    text-decoration: underline;
+}
+
+.breadcrumb a i {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.breadcrumb-separator {
+    color: var(--text-secondary);
+    font-weight: 400;
+    opacity: 0.6;
+    margin: 0 0.2rem;
+}
+
+.breadcrumb-current {
+    color: var(--secondary);
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+}
+
+/* Responsive breadcrumbs */
+@media (max-width: 768px) {
+    .breadcrumb-container {
+        padding: 0 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .breadcrumb {
+        font-size: 0.85rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+    }
+    
+    .breadcrumb a,
+    .breadcrumb-current {
+        padding: 0.2rem 0.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .breadcrumb {
+        gap: 0.3rem;
+    }
+    
+    .breadcrumb a i {
+        font-size: 0.75rem;
+    }
+    
+    .breadcrumb-separator {
+        margin: 0 0.1rem;
+    }
+}
+
+/* ==========================================================================
+   PAGE HEADERS
+   ========================================================================== */
+
+.page-header {
+    text-align: center;
+    margin: 1rem 0 2rem 0;  /* Reduced top margin from 2rem to 1rem */
+    padding: 0 1rem;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.page-header h1 i {
+    color: var(--primary);
+    margin-right: 0.5rem;
+}
+
+.page-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Modern Header Layout (Rankings, Profile styles) */
+.page-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: var(--max-content-width, 1200px);
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.page-title-section {
+    flex: 1;
+    text-align: left;
+}
+
+.page-title-section h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: flex-start;
+}
+
+.page-title-section p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+    max-width: none;
+}
+
+.page-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+}
+
+/* Responsive Design for Page Headers */
+@media (max-width: 768px) {
+    .page-header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    
+    .page-title-section {
+        text-align: center;
+    }
+    
+    .page-title-section h1 {
+        justify-content: center;
+        font-size: 1.8rem;
+    }
+    
+    .page-actions {
+        justify-content: center;
+        padding-top: 0;
+    }
+    
+    .nav-btn-group {
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE UTILITIES
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .pagination-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .pagination-controls {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .pagination-btn {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .page-numbers {
+        order: -1;
+        margin-bottom: 0.5rem;
+    }
+    
+    .search-container {
+        max-width: none;
+    }
+    
+    .btn {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-numbers {
+        gap: 0.125rem;
+    }
+    
+    .page-number {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8rem;
+        min-width: 32px;
+    }
+    
+    .pagination-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+}

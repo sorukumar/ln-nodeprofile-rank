@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Explorer - Lightning Network Node Analytics</title>
+    
+    <!-- Bitcoin Data Labs styles -->
+    <link rel="stylesheet" href="https://sorukumar.github.io/Bitcoin-Data-Labs/styles/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Local styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/trending.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Bitcoin Data Labs Header -->
+    <div id="header"></div>
+    
+    <div class="main-content">
+        <div class="explorer-container">
+            <!-- Breadcrumb Navigation -->
+            <div class="breadcrumb-container">
+                <div class="breadcrumb">
+                    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">Node Explorer</span>
+                </div>
+            </div>
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-content">
+                    <div class="page-title-section">
+                        <h1><i class="fas fa-compass"></i> Node Explorer</h1>
+                        <p>Explore and discover Lightning Network nodes with advanced filtering and sorting capabilities</p>
+                    </div>
+                    <div class="page-actions">
+                        <div class="nav-btn-group">
+                            <a href="prank.html" class="nav-btn">
+                                <i class="fas fa-chart-bar"></i>
+                                Node Rankings
+                            </a>
+                            <a href="index.html" class="nav-btn">
+                                <i class="fas fa-home"></i>
+                                Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node Explorer Controls -->
+            <div class="explorer-controls">
+                <div class="controls-row">
+                    <!-- Search -->
+                    <div class="search-container">
+                        <input type="text" id="nodeExplorerSearchInput" placeholder="Search by node alias or pubkey..." class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+
+                    <!-- View Toggle -->
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid" title="Grid View">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-btn" data-view="list" title="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <!-- Basic Filters -->
+                    <div class="filter-group">
+                        <select id="sortBy" class="filter-select">
+                            <option value="pleb_rank">Sort by Pleb Rank</option>
+                            <option value="total_capacity_rank">Sort by Capacity Rank</option>
+                            <option value="total_channels_rank">Sort by Channels Rank</option>
+                            <option value="betweenness_centrality_rank">Sort by Betweenness Rank</option>
+                            <option value="eigenvector_centrality_rank">Sort by Eigenvector Rank</option>
+                            <option value="capacity_weighted_degree_rank">Sort by Weighted Degree Rank</option>
+                            <option value="custom_pagerank_rank">Sort by PageRank</option>
+                            <option value="total_channels">Sort by Channel Count</option>
+                            <option value="total_capacity">Sort by Total Capacity</option>
+                            <option value="birth_tx:asc">Sort by Oldest Node</option>
+                            <option value="birth_tx:desc">Sort by Newest Node</option>
+                        </select>
+
+                        <select id="nodeTypeFilter" class="filter-select">
+                            <option value="all">All Node Types</option>
+                            <option value="routing">Routing Nodes</option>
+                            <option value="mobile">Mobile Nodes</option>
+                            <option value="clearnet">Clearnet Nodes</option>
+                            <option value="tor">Tor Nodes</option>
+                        </select>
+
+                        <button id="resetFilters" class="reset-btn">
+                            <i class="fas fa-undo"></i> Reset All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Presets -->
+                <div class="filter-presets-row">
+                    <div class="filter-presets">
+                        <span class="presets-label">Quick Filters:</span>
+                        <button class="filter-preset" data-preset="top_routing_nodes">
+                            <i class="fas fa-route"></i> Top Routing Nodes
+                        </button>
+                        <button class="filter-preset" data-preset="emerging_nodes">
+                            <i class="fas fa-seedling"></i> Emerging Nodes
+                        </button>
+                        <button class="filter-preset" data-preset="high_capacity">
+                            <i class="fas fa-coins"></i> High Capacity
+                        </button>
+                        <button class="filter-preset" data-preset="well_connected">
+                            <i class="fas fa-network-wired"></i> Well Connected
+                        </button>
+                        <button class="filter-preset" data-preset="low_fees">
+                            <i class="fas fa-percentage"></i> Low Fees
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Range Filters -->
+                <div class="advanced-filters-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-sliders-h"></i> Advanced Range Filters</h3>
+                        <button class="toggle-filters" onclick="this.parentElement.parentElement.classList.toggle('expanded')">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="filters-grid">
+                        <!-- Ranking Filters -->
+                        <div class="filter-category">
+                            <h4><i class="fas fa-trophy"></i> Rankings</h4>
+                            <div class="range-filter">
+                                <label>Pleb Rank</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="pleb_rank_min" placeholder="Min rank" min="1">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="pleb_rank_max" placeholder="Max rank" min="1">
+                                </div>
+                            </div>
+                            <div class="range-filter">
+                                <label>Betweenness Centrality Rank</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="betweenness_centrality_rank_min" placeholder="Min rank" min="1">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="betweenness_centrality_rank_max" placeholder="Max rank" min="1">
+                                </div>
+                            </div>
+                            <div class="range-filter">
+                                <label>Capacity Rank</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="total_capacity_rank_min" placeholder="Min rank" min="1">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="total_capacity_rank_max" placeholder="Max rank" min="1">
+                                </div>
+                            </div>
+                            <div class="range-filter">
+                                <label>Channels Rank</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="total_channels_rank_min" placeholder="Min rank" min="1">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="total_channels_rank_max" placeholder="Max rank" min="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Node Metrics -->
+                        <div class="filter-category">
+                            <h4><i class="fas fa-chart-bar"></i> Node Metrics</h4>
+                            <div class="range-filter">
+                                <label>Total Capacity (sats)</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="total_capacity_min" placeholder="Min capacity" min="0">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="total_capacity_max" placeholder="Max capacity" min="0">
+                                </div>
+                            </div>
+                            <div class="range-filter">
+                                <label>Channel Count</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="total_channels_min" placeholder="Min channels" min="0">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="total_channels_max" placeholder="Max channels" min="0">
+                                </div>
+                            </div>
+                            <div class="range-filter">
+                                <label>Average Fee Rate (ppm)</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="avg_fee_rate_min" placeholder="Min fee rate" min="0">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="avg_fee_rate_max" placeholder="Max fee rate" min="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Rankings -->
+                        <div class="filter-category">
+                            <h4><i class="fas fa-sitemap"></i> Network Rankings</h4>
+                            <div class="range-filter">
+                                <label>Eigenvector Centrality Rank</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="eigenvector_centrality_rank_min" placeholder="Min rank" min="1">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="eigenvector_centrality_rank_max" placeholder="Max rank" min="1">
+                                </div>
+                            </div>
+                            <div class="range-filter">
+                                <label>Weighted Degree Rank</label>
+                                <div class="range-inputs">
+                                    <input type="number" id="capacity_weighted_degree_rank_min" placeholder="Min rank" min="1">
+                                    <span class="range-separator">to</span>
+                                    <input type="number" id="capacity_weighted_degree_rank_max" placeholder="Max rank" min="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Statistics -->
+                <div class="filter-stats">
+                    <div id="filterStats">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <div class="loading-content">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading node data...</p>
+                </div>
+            </div>
+
+            <!-- Node Explorer Container -->
+            <div id="nodeExplorerContainer" class="node-explorer-container grid-view" style="display: none;">
+                <div id="nodeExplorerGrid" class="node-explorer-grid">
+                    <!-- Nodes will be populated here -->
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="paginationContainer" class="pagination-container container" style="display: none;">
+                <div class="pagination-info">
+                    <span id="paginationText">Showing 1-20 of 0 nodes</span>
+                </div>
+                <div class="pagination-controls">
+                    <button id="prevPage" class="pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <div id="pageNumbers" class="page-numbers">
+                        <!-- Page numbers will be populated here -->
+                    </div>
+                    <button id="nextPage" class="pagination-btn">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bitcoin Data Labs Footer -->
+    <div id="footer"></div>
+
+    <!-- Bitcoin Data Labs App Components -->
+    <script src="https://sorukumar.github.io/Bitcoin-Data-Labs/components/app-components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            BitcoinLabsAppComponents.init({
+                isApp: true,
+                appName: "ln-nodeprofile-rank",
+                appHomeUrl: "https://sorukumar.github.io/ln-nodeprofile-rank/"
+            });
+        });
+    </script>
+    
+    <!-- Node Explorer functionality -->
+    <script type="module" src="scripts/trending.js"></script>
+</body>
+</html>

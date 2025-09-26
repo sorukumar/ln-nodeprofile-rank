@@ -1,0 +1,30 @@
+[
+  {
+    "pub_key": "03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f",
+    "comment": "One of the most well-connected routing nodes with excellent uptime and reliability"
+  },
+  {
+    "pub_key": "0225c2a44be98ae923118e92c5b58033a0fd7dd3135be99ee1047ec9d30291dc5d",
+    "comment": "The node that powers Plebdashboard. Maintained for research and community service"
+  },
+  {
+    "pub_key": "02ad6fb8d693dc1e4569bcedefadf5f72a931ae027dc0f0c544b34c1c6f3b9a02b",
+    "comment": "Emerging node with strategic channel placement and growing network presence"
+  },
+  {
+    "pub_key": "03037dc08e9ac63b82581f79b662a4d0ceca8a8ca162b1af3551595b8f2d97b70a",
+    "comment": "Professional routing node with consistent performance metrics"
+  },
+  {
+    "pub_key": "0217890e3aad8d35bc054f43acc00084b25229ecff0ab68debd82883ad65ee8266",
+    "comment": "Community-focused node supporting Lightning Network adoption"
+  },
+  {
+    "pub_key": "03c2abfa93eacec04721c019644584424aab2ba4dff3ac9bdab4e9c97007491dda",
+    "comment": "Innovation-driven node experimenting with new Lightning features"
+  },
+  {
+    "pub_key": "03434a39cd9a537c852fc8fb72454086d726f9111e9f730cef4985c39c11fae944",
+    "comment": "One of the oldest Node"
+  }
+]

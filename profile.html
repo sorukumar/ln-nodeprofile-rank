@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Profile - LN Node Profile Rank</title>
+    
+    <!-- Bitcoin Data Labs styles -->
+    <link rel="stylesheet" href="https://sorukumar.github.io/Bitcoin-Data-Labs/styles/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Local styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/profile.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Bitcoin Data Labs Header -->
+    <div id="header"></div>
+    
+    <div class="main-content">
+        <!-- Loading state -->
+        <div id="loading" class="loading-container">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading node profile...</p>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div id="error" class="error-container" style="display: none;">
+            <div class="error-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>Node Not Found</h2>
+                <p id="errorMessage">The requested node could not be found.</p>
+                <a href="index.html" class="btn-primary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Profile content -->
+        <div id="profileContent" class="profile-container" style="display: none;">
+            <!-- Breadcrumb Navigation -->
+            <div class="breadcrumb-container">
+                <div class="breadcrumb">
+                    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">Node Profile</span>
+                </div>
+            </div>
+
+            <!-- Node Header -->
+            <div class="profile-header">
+                <div class="profile-basic-info">
+                    <h1 id="nodeAlias" class="node-alias">Loading...</h1>
+                    <div class="node-pubkey-container">
+                        <span class="node-pubkey" id="nodePubkey">Loading...</span>
+                        <button class="copy-btn" id="copyPubkeyBtn" title="Copy public key">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="node-type-badge" id="nodeTypeBadge">
+                        <i class="fas fa-server"></i>
+                        <span id="nodeType">Loading...</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn-secondary" onclick="window.history.back()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <div class="nav-btn-group">
+                        <a href="prank.html" class="nav-btn">
+                            <i class="fas fa-chart-line"></i>
+                            Rankings
+                        </a>
+                        <a href="trending.html" class="nav-btn">
+                            <i class="fas fa-compass"></i>
+                            Node Explorer
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Overall Rank</div>
+                        <div class="stat-value" id="overallRank">-</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Capacity</div>
+                        <div class="stat-value" id="totalCapacity">-</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Channel Count</div>
+                        <div class="stat-value" id="channelCount">-</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Last Seen</div>
+                        <div class="stat-value" id="lastSeen">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-info-circle"></i> Overview
+                </button>
+                <button class="tab-btn" data-tab="rankings">
+                    <i class="fas fa-chart-line"></i> Rankings
+                </button>
+                <button class="tab-btn" data-tab="channels">
+                    <i class="fas fa-link"></i> Channels
+                </button>
+                <button class="tab-btn" data-tab="channels-table">
+                    <i class="fas fa-table"></i> Channel Details
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Overview Tab -->
+                <div id="overview" class="tab-pane active">
+                    <div class="overview-grid">
+                        <div class="overview-section">
+                            <h3><i class="fas fa-info-circle"></i> Node Information</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Birth Transaction</span>
+                                    <span class="info-value" id="birthTx">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Clearnet</span>
+                                    <span class="info-value" id="address1">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Tor Address</span>
+                                    <span class="info-value" id="address2">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="overview-section">
+                            <h3><i class="fas fa-network-wired"></i> Node Statistics</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Node Capacity Tier</span>
+                                    <span class="info-value" id="nodeCapTier">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Category Counts</span>
+                                    <span class="info-value" id="categoryCounts">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Channel Size (min, median, avg, max)</span>
+                                    <span class="info-value" id="channelSizeMetrics">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rankings Tab -->
+                <div id="rankings" class="tab-pane">
+                    <div class="rankings-grid">
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <i class="fas fa-medal"></i>
+                                <h4>Pleb Rank</h4>
+                            </div>
+                            <div class="ranking-value" id="plebRank">-</div>
+                            <div class="ranking-description">Overall community ranking</div>
+                        </div>
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <i class="fas fa-coins"></i>
+                                <h4>Capacity Rank</h4>
+                            </div>
+                            <div class="ranking-value" id="capacityRank">-</div>
+                            <div class="ranking-description">Ranked by total capacity</div>
+                        </div>
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <i class="fas fa-network-wired"></i>
+                                <h4>Channels Rank</h4>
+                            </div>
+                            <div class="ranking-value" id="channelsRank">-</div>
+                            <div class="ranking-description">Ranked by channel count</div>
+                        </div>
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <i class="fas fa-project-diagram"></i>
+                                <h4>Betweenness Rank</h4>
+                            </div>
+                            <div class="ranking-value" id="betweennessRank">-</div>
+                            <div class="ranking-description">Network centrality ranking</div>
+                        </div>
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <i class="fas fa-share-alt"></i>
+                                <h4>Weighted Degree Rank</h4>
+                            </div>
+                            <div class="ranking-value" id="weightedDegreeRank">-</div>
+                            <div class="ranking-description">Connection strength ranking</div>
+                        </div>
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <i class="fas fa-star"></i>
+                                <h4>Eigenvector Rank</h4>
+                            </div>
+                            <div class="ranking-value" id="eigenvectorRank">-</div>
+                            <div class="ranking-description">Influence ranking</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Channels Tab -->
+                <div id="channels" class="tab-pane">
+                    <div id="channelsTreemap" style="width:100%;height:500px;"></div>
+                </div>
+
+                <!-- Channel Details Tab -->
+                <div id="channels-table" class="tab-pane">
+                    <div class="section-header">
+                        <h3><i class="fas fa-table"></i> Channel Details</h3>
+                        <p>Detailed table of all channels with fee policies and HTLC settings</p>
+                    </div>
+                    <div id="channelsTableContainer">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading channel details...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bitcoin Data Labs Footer -->
+    <div id="footer"></div>
+
+    <!-- Bitcoin Data Labs App Components -->
+    <script src="https://sorukumar.github.io/Bitcoin-Data-Labs/components/app-components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            BitcoinLabsAppComponents.init({
+                isApp: true,
+                appName: "ln-nodeprofile-rank",
+                appHomeUrl: "https://sorukumar.github.io/ln-nodeprofile-rank/"
+            });
+        });
+    </script>
+    
+    <!-- Profile functionality -->
+    <script type="module" src="scripts/profile.js"></script>
+</body>
+</html>

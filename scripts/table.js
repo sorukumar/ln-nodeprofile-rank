@@ -43,6 +43,38 @@ function copyPubKey(pubKey, element) {
 window.copyPubKey = copyPubKey;
 
 class DataTableManager {
+    columns = [
+        'pleb_rank',
+        'channels_rank',
+        'capacity_rank',
+        'weighted_degree_rank',
+        'betweenness_rank',
+        'eigenvector_rank',
+        'pagerank',
+        'alias',
+        'node_type',
+        'total_capacity',
+        'num_channels',
+        'last_seen',
+        'pub_key'
+    ];
+
+    visibleColumns = [
+        'pleb_rank',
+        'channels_rank',
+        'capacity_rank',
+        'weighted_degree_rank',
+        'betweenness_rank',
+        'eigenvector_rank',
+        // 'pagerank', // hidden
+        'alias',
+        'node_type',
+        'total_capacity',
+        'num_channels',
+        'last_seen',
+        'pub_key'
+    ];
+
     constructor() {
         this.data = [];
         this.filteredData = [];
@@ -101,31 +133,10 @@ class DataTableManager {
                     console.log('parquetRead result:', result);
                     console.log('Total rows:', result.length);
                     
-                    // Manually define column names based on your Parquet schema
-                    const columns = [
-                        'Pleb_Rank',
-                        'Betweenness_Rank', 
-                        'Eigenvector_Rank',
-                        'PageRank',
-                        'Weighted_Degree_Rank',
-                        'Channels_Rank',
-                        'Capacity_Rank',
-                        'alias',
-                        'Node_Type',
-                        'Total_Capacity',
-                        'Num_Channels',
-                        'Public_Key'
-                    ];
-                    
-                    if (result.columns && result.data) {
-                        // If result has columns and data properties (unlikely with hyparquet)
-                        this.data = result.data.map(row =>
-                            Object.fromEntries(result.columns.map((col, i) => [col, row[i]]))
-                        );
-                    } else if (Array.isArray(result) && result.length > 0) {
+                    if (Array.isArray(result) && result.length > 0) {
                         // Map each data row to an object using manual column names
                         this.data = result.map(row =>
-                            Object.fromEntries(columns.map((col, i) => [col, row[i]]))
+                            Object.fromEntries(this.columns.map((col, i) => [col, row[i]]))
                         );
                     } else {
                         this.data = [];
@@ -167,7 +178,7 @@ class DataTableManager {
     
     sortData(column) {
         // Skip sorting for non-sortable columns
-        const nonSortableColumns = ['alias', 'Public_Key'];
+        const nonSortableColumns = ['alias', 'pub_key'];
         if (nonSortableColumns.includes(column)) return;
 
         if (this.sortColumn === column) {
@@ -181,14 +192,14 @@ class DataTableManager {
 
         // Define numeric columns
         const numericColumns = [
-            'Pleb_Rank',
-            'Betweenness_Rank',
-            'Eigenvector_Rank',
-            'PageRank',
-            'Weighted_Degree_Rank',
-            'Channels_Rank',
-            'Capacity_Rank',
-            'Num_Channels'
+            'pleb_rank',
+            'channels_rank',
+            'capacity_rank',
+            'weighted_degree_rank',
+            'betweenness_rank', 
+            'eigenvector_rank',
+            'pagerank',
+            'num_channels'
         ];
 
         this.filteredData.sort((a, b) => {
@@ -241,27 +252,25 @@ class DataTableManager {
         
         if (!table || !thead || !tbody) return;
         
-        if (thead.children.length === 0) {
-            const headerRow = document.createElement('tr');
-            const columns = Object.keys(this.data[0]);
+        thead.innerHTML = '';
+        const headerRow = document.createElement('tr');
+        
+        this.visibleColumns.forEach(column => {
+            const th = document.createElement('th');
+            th.textContent = this.formatColumnName(column);
+            th.dataset.column = column;
             
-            columns.forEach(column => {
-                const th = document.createElement('th');
-                th.textContent = this.formatColumnName(column);
-                th.dataset.column = column;
-                
-                // Only add sorting for sortable columns
-                const nonSortableColumns = ['alias', 'Public_Key'];
-                if (!nonSortableColumns.includes(column)) {
-                    th.classList.add('sortable');
-                    th.addEventListener('click', () => this.sortData(column));
-                }
-                
-                headerRow.appendChild(th);
-            });
+            // Only add sorting for sortable columns
+            const nonSortableColumns = ['alias', 'pub_key', 'node_type', 'last_seen', 'total_capacity'];
+            if (!nonSortableColumns.includes(column)) {
+                th.classList.add('sortable');
+                th.addEventListener('click', () => this.sortData(column));
+            }
             
-            thead.appendChild(headerRow);
-        }
+            headerRow.appendChild(th);
+        });
+        
+        thead.appendChild(headerRow);
         
         tbody.innerHTML = '';
         const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -271,18 +280,23 @@ class DataTableManager {
         pageData.forEach(row => {
             const tr = document.createElement('tr');
             
-            // Fixed: Use Object.entries to get both key and value
-            Object.entries(row).forEach(([key, value]) => {
+            this.visibleColumns.forEach(key => {
+                const value = row[key];
                 const td = document.createElement('td');
 
                 // Special handling for pubkey column
-                if (key === 'Public_Key' || key.toLowerCase().includes('pubkey') || key.toLowerCase().includes('public_key')) {
+                if (key === 'pub_key') {
                     td.classList.add('pubkey-cell');
                     td.innerHTML = `
-                        <span class="pubkey-truncated" onclick="copyPubKey('${value}', this)" title="Click to copy: ${value}">
-                            ${value.substring(0, 8)}...
+                        <span class="pubkey-truncated" onclick="copyPubKey('${value || ''}', this)" title="Click to copy: ${value || ''}">
+                            ${(value && typeof value === 'string') ? value.substring(0, 8) + '...' : '-'}
                         </span>
                     `;
+                } else if (key === 'last_seen') {
+                    td.classList.add('last-seen-cell'); // for custom styling
+                    td.textContent = value ? value : '-'; // assuming string YYYY-MM
+                } else if (key === 'num_channels') {
+                    td.textContent = value ? Number(value).toLocaleString() : '-';
                 } else {
                     td.textContent = this.formatCellValue(value);
                 }
